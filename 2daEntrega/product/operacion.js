@@ -1,0 +1,27 @@
+class Operando {
+    constructor(num1, num2, accion) {
+        this.num1 = num1;
+        this.num2 = num2;
+        this.accion = accion;
+    }
+    resultado() {
+        if (this.accion === "sumar") {
+            return (this.num1 + this.num2);
+        }
+        else {
+            return (this.num1 - this.num2);
+        }
+    }
+}
+export const operacion = (num1, num2, str) => {
+    return new Promise((resolve, reject) => {
+        if (str === "sumar" || str === "restar") {
+            let operando1;
+            operando1 = new Operando(num1, num2, str);
+            resolve(operando1.resultado());
+        }
+        else {
+            reject(`la accion a ingresar debe ser sumar o restar, error`);
+        }
+    });
+};
