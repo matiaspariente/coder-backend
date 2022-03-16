@@ -1,5 +1,3 @@
-import fs, { readFile } from 'fs';
-
 export default class Productos { 
     constructor() {
         this.productos = [];
