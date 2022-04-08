@@ -1,0 +1,32 @@
+
+.cardsProductos{
+    padding: 10%;
+}
+
+.ingresoProductos{
+    padding: 50px;
+}
+
+.listadoProductos{
+    padding: 50px;
+    .tarjetas a{
+        padding: 5px;
+     }
+}
+
+.carrito {
+    padding-right: 50px !important;
+    padding-left: 50px !important;
+    width: 40%;
+}
+
+.formularioIngreso{
+    width: 40%;
+    padding: 20px;
+    border-width: thin;
+    border-style: solid;
+    border-color: #000
+    
+}
+
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss"

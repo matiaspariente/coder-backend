@@ -3,20 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./scss/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="./js-bt/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-    <h1>Formulario Ingreso de productos</h1>
-    <form id="userForm">
-        <label>Titulo</label>
-        <input name="title" type="text">
-        <label>Precio</label>
-        <input name="price" type="number">
-        <label>Thumbnail</label>
-        <input name="thumbnail">
-        <input type="submit">
-    </form>
+
+    <!-- Seccion de formulario de Ingreso de Productos -->
+
+    <section class="ingresoProductos" id="ingresoProductos">
+    </section>
+
+    <!-- Seccion de Listado de Productos -->
+
+    <section class="listadoProductos">
+    <h1>Productos</h1>
+    <div class="cardsProductos row row-cols-2 row-cols-md-4 g-4" id="cardsProductos"></div>
+    </section>
+
+    <!-- Seccion de Listado de Carrito -->
+
+    <section class="carrito">
+        <h1>Carrito</h1>
+        <table id="carrito" class="carrito table table-sm table-striped table-dark"></table>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script src="index.js"></script>
 </body>
 </html>
