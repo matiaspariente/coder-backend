@@ -1,0 +1,14 @@
+<div class="vistaProductos">
+    <h1>Vista de Productos</h1>
+    <div>
+       <h2 class="aviso" style="{{avisoProductos}}">No se encontraron productos</h2> <!--Aviso de no hay productos, si se recibe parametro no se muestra en pantalla-->
+    </div>
+    <table class="table table-sm table-striped table-dark tablaFormulario">
+    <thead style="{{sinProductos}}"><th>Nombre</th><th>Precio</th><th>Foto</th></thead> <!--Encabezado de tabla, si se recibe parametro  se muestra en pantalla-->
+    {{#each productos}}
+    <tbody><td>{{this.title}}</td><td>{{this.price}}</td><td><img src="{{this.thumbnail}}" class="imagen" alt="{{this.thumbnail}}"></td></tbody> <!--Se genera tabla de productos-->
+    {{/each}}
+    </table>
+    <button type="submit" id="btnIngresoProductos" class="btn btn-primary btnIngresoProductos">Ir a Ingreso de Productos</button>
+</div> 
+<script src="js/products.js"></script> 
