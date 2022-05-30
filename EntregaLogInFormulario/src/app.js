@@ -1,13 +1,15 @@
 import express from 'express';
 import apiProductosRouter from './routes/apiProductos.js';
 import apiProductosTestRouter from './routes/apiProductosTest.js';
-import apiLogin from './routes/apiLogin.js';
+import viewsRouter from './routes/viewsRouter.js';
 import { Server } from 'socket.io';
 import __dirname from './utils.js';
 import {schema, normalize, denormalize} from 'normalizr'
 import fs from 'fs';
 import expressSession from 'express-session'
 import FileStore from 'session-file-store'
+import handlebars from 'express-handlebars'
+import MongoStore from 'connect-mongo'
 
 const File = FileStore(expressSession) 
 
@@ -15,41 +17,39 @@ const app= express();
 const PORT = process.env.PORT||8050;
 const server = app.listen(PORT,()=>console.log(`listening on ${PORT}`))
 
+const advancedOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}
+
+app.engine('handlebars',handlebars.engine());
+app.set('views',__dirname+'/views')
+app.set('view engine','handlebars')
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-app.use(expressSession({
+app.use(expressSession({ // se persiste SESSIONS en Mongo
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://coderhouse:coderhouse@matiaspariente.qctoeul.mongodb.net/?retryWrites=true&w=majority",
+        mongoOptions: advancedOptions
+    }),
     secret:"secret",
-    store: new File({path: "./sesiones/", ttl:300, retries:0}),
     resave: true,
+    cookie: { maxAge: 1000 *60 },
     saveUninitialized:true
 }))
 
 const io = new Server(server);
 
-const getName = req => req.session.name ? `${req.session.name},` : '';
 
-app.get('/login',(req,res,next)=>{
-    let { name } = req.query
-    if(req.session.contador){
-        req.session.contador++
-        res.send(`${getName(req)} Tienes ${req.session.contador} visitas`)
-    }else{
-        if(name) req.session.name = name;
-        req.session.contador = 1;
-        res.send(`<h1><b>${getName(req)}</b> Bienvenido</h1>`)
-    }
-
-})
-
-app.use('/',express.static(__dirname+'/public'))
-
+app.use(express.static(__dirname+'/public'))
+app.use('/',viewsRouter)
 app.use('/api/productos/',apiProductosRouter)
 app.use('/api/productos-test/',apiProductosTestRouter)
 
-const log = [];
-console.log()
-const chatLog = JSON.parse(fs.readFileSync(__dirname+'/data/chat.json','utf-8'));
 
+const log = [];
+const chatLog = JSON.parse(fs.readFileSync(__dirname+'/data/chat.json','utf-8'));
 
 
 io.on('connection',socket=>{ // escucho conexiones nuevas

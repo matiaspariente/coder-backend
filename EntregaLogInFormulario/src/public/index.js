@@ -6,8 +6,6 @@ let formBtn =document.getElementById('formBtn');
 let testBtn =document.getElementById('testBtn');
 let chatBox = document.getElementById('chatBox');
 let chatBtn =document.getElementById('chatBtn');
-let logoutBtn =document.getElementById('logoutBtn');
-let mensajeBienvenida = document.getElementById('mensajeBienvenida');
 
 formBtn.addEventListener('click',(evt)=>{ // espero evento de boton de envio de formulario
     evt.preventDefault();
@@ -22,6 +20,7 @@ formBtn.addEventListener('click',(evt)=>{ // espero evento de boton de envio de 
         }
     })
 })
+
 
 testBtn.addEventListener('click',(evt)=>{ // Boton para obtener productos al azar de la api-test
     evt.preventDefault();
@@ -55,12 +54,6 @@ fetch('/api/productos/', options) // hago un fetch para atraves del metodo get o
         socket.emit('start',JSON.parse(data))
     });
     
-fetch('/login', options) // hago un fetch para atraves del metodo get obtener los productos cargados hasta el momento al iniciar la conexion con el cliente nuevo
-    .then((res,req) => console.log(req.session))
-    .then(data => {
-        console.log(data)
-    });    
-
 /*SOCKETS */
 
 socket.on('log',data=>{ // recibo conexion del servidor cuando se ejecuta un POST, DELETE o PUT y modifico la tabla con los nuevos valores.
@@ -93,8 +86,7 @@ socket.on('chat', (data,compresion)=>{ // recibo del servidor el array del chat 
              ${dt.toLocaleString(luxon.DateTime.TIME_WITH_SECONDS)}]</p> <p style="color:green"><i>:${log.text}</i></p><img src="${log.author.avatar}" width="30" height="30" alt="${log.author.avatar}"></br>`;
     })
     log.innerHTML=messages;
-    compresionText.innerHTML=messageCompresion;
-    
+    compresionText.innerHTML=messageCompresion; 
 })
 
 

@@ -55,6 +55,16 @@
   color: black;
 }
 
+.logOut {
+  background-color: #959a97;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.logOut h1 {
+  color: black;
+}
+
 .chat {
   background-color: #ffff01;
   padding: 20px;
