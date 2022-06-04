@@ -65,6 +65,26 @@
   color: black;
 }
 
+.errorRegister {
+  background-color: #b03232;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.errorRegister h1 {
+  color: black;
+}
+
+.errorLogin {
+  background-color: #b03232;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.errorLogin h1 {
+  color: black;
+}
+
 .chat {
   background-color: #ffff01;
   padding: 20px;
