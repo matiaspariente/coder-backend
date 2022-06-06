@@ -1,0 +1,21 @@
+import express from 'express';
+
+
+const router = express.Router();
+
+const proceso = {
+    argumentos: process.argv.slice(2),
+    plataforma: process.platform,
+    node_version: process.versions.node,
+    memory_rss: process.memoryUsage.rss(),
+    path_exec: process.execPath,
+    processid: process.pid,
+    carpeta: process.argv[1]
+}
+
+router.get('/',(req,res)=>{ 
+    res.render('info',{ proceso })
+})
+
+
+export default router;
