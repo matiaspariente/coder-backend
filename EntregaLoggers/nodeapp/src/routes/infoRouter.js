@@ -18,7 +18,8 @@ const proceso = {
 }
 
 router.get('/',(req,res)=>{
-    logger.info(" Ruta /info Metodo Get") 
+    logger.info(" Ruta /info Metodo Get")
+    console.log(" Ruta /info Metodo Get") 
     res.render('info',{ proceso })
 })
 

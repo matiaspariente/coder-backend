@@ -6,7 +6,7 @@ const logger = log4js.getLogger();
 
 const router = express.Router();
 
-let child_process = fork("src/child_random.js")
+/* let child_process = fork("src/child_random.js")
 
 
 function secundaria() {
@@ -26,6 +26,6 @@ router.get('/', async(req,res)=>{
         else child_process.send(100000000)
         let objeto = await secundaria()
         res.send(objeto.result)     
-})
+}) */
 
 export default router;
