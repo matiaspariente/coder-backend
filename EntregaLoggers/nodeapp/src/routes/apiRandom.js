@@ -1,6 +1,8 @@
 import express from "express";
 import { fork } from 'child_process'
+import log4js from '../utils/loggers/log4js.js';
 
+const logger = log4js.getLogger();
 
 const router = express.Router();
 
@@ -19,6 +21,7 @@ function secundaria() {
 
 
 router.get('/', async(req,res)=>{
+        logger.info(" Ruta /random Metodo Get")
         if(req.query.cant) child_process.send(req.query.cant)
         else child_process.send(100000000)
         let objeto = await secundaria()

@@ -1,5 +1,8 @@
 import express from 'express';
-import cpus from 'os'
+import cpus from 'os';
+import log4js from '../utils/loggers/log4js.js';
+
+const logger = log4js.getLogger();
 
 const router = express.Router();
 
@@ -14,7 +17,8 @@ const proceso = {
     cant_proc: cpus.cpus().length 
 }
 
-router.get('/',(req,res)=>{ 
+router.get('/',(req,res)=>{
+    logger.info(" Ruta /info Metodo Get") 
     res.render('info',{ proceso })
 })
 

@@ -1,5 +1,6 @@
 import express from 'express';
 import apiProductosRouter from './routes/apiProductos.js';
+import apiCartsRouter from './routes/apiCarts.js';
 import apiProductosTestRouter from './routes/apiProductosTest.js';
 import viewsRouter from './routes/viewsRouter.js';
 import infoRouter from './routes/infoRouter.js';
@@ -19,13 +20,17 @@ import bcrypt from "bcrypt-nodejs"
 import dotenv from 'dotenv'
 import minimist from "minimist";
 import cpus from 'os';
-import cluster from 'cluster'
+import cluster from 'cluster';
+import gzip from 'compression';
+import log4js from './utils/loggers/log4js.js';
+
+const logger = log4js.getLogger('loggerFileWarning');
 
 let args = process.argv.slice(2);
 
 let options = {
     default:{
-        port:8080,
+        port:8050,
         modo:"fork"
     },
 }
@@ -38,9 +43,10 @@ const app= express();
 const PORT = argv.port
 const MODO = argv.modo
 const numCPUs = cpus.cpus().length
+let io = null
+
 
 if (MODO === "cluster") {
-    console.log("Modo Cluster");
     if (cluster.isMaster) {
         for (let index = 0; index < numCPUs; index++) {
             cluster.fork()
@@ -48,7 +54,7 @@ if (MODO === "cluster") {
         }
     } else {
         const server = app.listen(PORT,()=>console.log(`listening on ${PORT}`))
-        const io = new Server(server);
+        io = new Server(server);
 
         const chatLog = JSON.parse(fs.readFileSync(__dirname+'/data/chat.json','utf-8'));
 
@@ -70,6 +76,7 @@ if (MODO === "cluster") {
                         },
                         text: data.text
                     }
+                    chatLog.messages.push(messageCurrent);
                     fs.writeFileSync(__dirname+'/data/chat.json',JSON.stringify(chatLog),'utf-8');
                 }
                 const schemaAuthor = new schema.Entity('author', {}, { idAttribute: 'id' });
@@ -86,13 +93,8 @@ if (MODO === "cluster") {
 
 }else{
     const server = app.listen(PORT,()=>console.log(`listening on ${PORT}`))
-    console.log("Modo Fork");
-    console.log(MODO)
-    const io = new Server(server);
-
+    io = new Server(server);
     const chatLog = JSON.parse(fs.readFileSync(__dirname+'/data/chat.json','utf-8'));
-
-
     io.on('connection',socket=>{ // escucho conexiones nuevas
         socket.on('start',data=>{ //espero mensaje del fetch del primer GET para cargar tabla al conectar
             io.emit('log',data) // envio la data obtenida con el metodo GET 
@@ -110,6 +112,7 @@ if (MODO === "cluster") {
                     },
                     text: data.text
                 }
+                chatLog.messages.push(messageCurrent);
                 fs.writeFileSync(__dirname+'/data/chat.json',JSON.stringify(chatLog),'utf-8');
             }
             const schemaAuthor = new schema.Entity('author', {}, { idAttribute: 'id' });
@@ -121,7 +124,6 @@ if (MODO === "cluster") {
         })
     })
 }
-
 
 dotenv.config()
 
@@ -209,9 +211,14 @@ app.use(passport.session());
 
 app.use(express.static(__dirname+'/public'))
 app.use('/',viewsRouter)
-app.use('/info',infoRouter)
+app.use('/info',gzip(),infoRouter)
 app.use('/api/productos/',apiProductosRouter)
+app.use('/api/carts/',apiCartsRouter)
 app.use('/api/productos-test/',apiProductosTestRouter)
 app.use('/api/random',apiRandomRouter)
+app.use('*',(req,res)=>{
+    logger.warn(`Ruta: ${req.originalUrl} No permitida`)
+    res.send("Ruta No permitida")
+})
 
 export default io;

@@ -1,10 +1,14 @@
 import express from "express";
 import faker from "faker";
+import log4js from '../utils/loggers/log4js.js';
+
+const logger = log4js.getLogger();
 
 const router = express.Router();
 
 
 router.get('/',(req,res)=>{
+    logger.info(" Ruta /api/productos-test Metodo Get")
     let content = [];
     let max = 5;
     for(let i = 0; i< max ; i++){
